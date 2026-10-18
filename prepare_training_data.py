@@ -4,9 +4,11 @@ import json
 import random
 import numpy as np
 
-T1 = pd.read_csv("210Merged.csv")
-T2 = pd.read_csv("NRCoRP_TrainingSet.csv")
+T1 = pd.read_csv("data/curated/NR_Sequences_New.csv")
+T2 = pd.read_csv("data/curated/NR_InputData_New.csv")
 T2['PTM_Label'] = T2['PTM_Type'] + '_' + T2['Site'].str[0]
+
+print(T2['PTM_Label'].value_counts())
 
 map2old = {
     'Methylation_K': 'Methy_K',
@@ -22,40 +24,44 @@ map2old = {
     'Acetylation_K': 'N6-ace_K', 
 }
 
-UL = {}
 TRAIN, TEST = {}, {}
 for uid in T2.UniprotID.unique():
-    tt = T2[T2['UniprotID'] == uid]
     seq = T1[T1['UniprotID'] == uid].iloc[0]['Sequence']
-    group = tt.groupby('PTM_Label')
     TRAIN[uid] = {'seq': seq, 'label': []}
     TEST[uid] = {'seq': seq, 'label': []}
-    for g in group.groups:
-        dd = group.get_group(g)
-        if dd.shape[0] >= 10:
-            train = dd.sample(n=int(np.floor(0.9 * dd.shape[0])), random_state=1, replace=False)
-            test = dd.drop(train.index)
-        else:
-            train = dd
-            test = dd.sample(n=1, random_state=1, replace=False)
-        for dset, tget in zip([train, test], ['TRAIN', 'TEST']):
-            for _, t in dset.iterrows():
-                site = int(t['Site'][1:]) - 1
-                ch = seq[site]
-                print(uid, t['Site'], t['PTM_Type'])
-                assert ch == t['Site'][0]
-                
-                label = t['PTM_Label']
-                if tget == 'TRAIN':
-                    TRAIN[uid]['label'].append({'site': site, 'ptm_type': label})
-                else:
-                    # for setting old labels
-                    # if label in map2old:
-                    #     label = map2old[label]
-                    #     TEST[uid]['label'].append({'site': site, 'ptm_type': label})
 
-                    # for new labels
-                    TEST[uid]['label'].append({'site': site, 'ptm_type': label})
+for ptm_label in T2.PTM_Label.unique():
+    ptm_data = T2[T2['PTM_Label'] == ptm_label]
+    if ptm_data.shape[0] < 20:
+        continue
+    
+    train = ptm_data.sample(n=int(np.floor(0.9 * ptm_data.shape[0])), random_state=1, replace=False)
+    test = ptm_data.drop(train.index)
+
+    for dset, tget in zip([train, test], ['TRAIN', 'TEST']):
+        for _, t in dset.iterrows():
+            uid = t['UniprotID']
+            seq = T1[T1['UniprotID'] == uid].iloc[0]['Sequence']
+            site = int(t['Site'][1:]) - 1
+            if site < 0 or site >= len(seq):
+                print(uid, t['Site'], t['PTM_Type'], 'Sequence too short')
+                continue
+            ch = seq[site]
+            if ch != t['Site'][0]:
+                print(uid, t['Site'], t['PTM_Type'], ch, 'Site not matching')
+                continue
+            
+            label = t['PTM_Label']
+            if tget == 'TRAIN':
+                TRAIN[uid]['label'].append({'site': site, 'ptm_type': label})
+            else:
+                # for setting old labels
+                # if label in map2old:
+                #     label = map2old[label]
+                #     TEST[uid]['label'].append({'site': site, 'ptm_type': label})
+
+                # for new labels
+                TEST[uid]['label'].append({'site': site, 'ptm_type': label})
 
 
 with open('train_data_new.json', 'w') as f:

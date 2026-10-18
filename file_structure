@@ -1,0 +1,615 @@
+.
+├── batch_predict.py
+├── benchmark_results
+│   ├── benchmark_comparison.csv
+│   ├── benchmark_comparison_long.csv
+│   ├── benchmark_comparison_metadata.json
+│   ├── benchmark_metadata.json
+│   ├── benchmark_sites.csv
+│   ├── bootstrap_pr_auc_distribution.csv
+│   ├── calibration_bins.csv
+│   ├── class_sizes.csv
+│   ├── excluded_missing_score_sites.csv
+│   ├── metrics.csv
+│   ├── NR_PTMpred_three_model_comparison.xlsx
+│   └── paired_pr_auc_differences.csv
+├── data
+│   ├── curated
+│   │   ├── drop_PTM_sites.txt
+│   │   ├── NR_InputData_New.csv
+│   │   ├── NR_Sequences_New.csv
+│   │   └── protein_sequences_new.fasta
+│   └── raw
+│       ├── Human.csv
+│       ├── Human_filtered.xlsx
+│       ├── Human_tr.csv
+│       └── LastRitesNRPTMdb.csv
+├── deprecated_files
+│   ├── bootstrap_pr_auc.py
+│   ├── common_ptms.py
+│   ├── evaluate_result_bs.py
+│   ├── get_roc_testdata.py
+│   ├── NR_InputData.csv
+│   ├── plot_confusionmatrix.py
+│   ├── protein_sequences.fasta
+│   └── test_data_new_oldlabel.json
+├── environment.yml
+├── evaluate_result.py
+├── evaluate_test_data.py
+├── fig_manuscript
+│   ├── fullmodelNEW.png
+│   └── fullmodelOLD.png
+├── file_structure
+├── model_desc.md
+├── new_model
+│   ├── MIND_fold_0
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_1
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_10
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_11
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_12
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_13
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_14
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_2
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_3
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_4
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_5
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_6
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_7
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_8
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fold_9
+│   │   ├── assets
+│   │   ├── fingerprint.pb
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   └── MIND_PRAU.json
+├── plot_ptm_performance.py
+├── plot_ptm_roc.py
+├── plots
+│   ├── Acetylation_K
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   ├── Methylation_K
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   ├── Phosphorylation_S
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   ├── Phosphorylation_T
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   ├── Phosphorylation_Y
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   ├── Sumoylation_K
+│   │   ├── confusion_matrix.png
+│   │   ├── pr_curve.png
+│   │   └── roc_curve.png
+│   └── Ubiquitination_K
+│       ├── confusion_matrix.png
+│       ├── pr_curve.png
+│       └── roc_curve.png
+├── prepare_benchmark_comparison.py
+├── prepare_training_data.py
+├── README.md
+├── requirements-lock.txt
+├── results_musitedeep
+│   └── correct_predictions.csv
+├── results_new
+│   ├── correct_predictions.csv
+│   └── result.json
+├── results_original
+│   ├── correct_predictions.csv
+│   ├── correct_predictions_newlabels.csv
+│   ├── correct_ptm_labels.py
+│   └── result.json
+├── saved_model
+│   ├── ambre_cys_fold_0
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_1
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_10
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_11
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_12
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_13
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_14
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_2
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_3
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_4
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_5
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_6
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_7
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_8
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_fold_9
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── ambre_cys_PRAU.json
+│   ├── g_fifteenfold_fold_0
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_1
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_10
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_11
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_12
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_13
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_14
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_2
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_3
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_4
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_5
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_6
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_7
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_8
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_fold_9
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── g_fifteenfold_PRAU.json
+│   ├── MIND_fifteenfold_fold_0
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_1
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_10
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_11
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_12
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_13
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_14
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_2
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_3
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_4
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_5
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_6
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_7
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_8
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_fold_9
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── MIND_fifteenfold_PRAU.json
+│   ├── OPTM_fifthteen_fold_0
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_1
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_10
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_11
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_12
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_13
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_14
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_2
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_3
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_4
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_5
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_6
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_7
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_8
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   ├── OPTM_fifthteen_fold_9
+│   │   ├── keras_metadata.pb
+│   │   ├── saved_model.pb
+│   │   └── variables
+│   │       ├── variables.data-00000-of-00001
+│   │       └── variables.index
+│   └── OPTM_fifthteen_PRAU.json
+├── src
+│   ├── __init__.py
+│   ├── model.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── __init__.cpython-39.pyc
+│   │   ├── model.cpython-310.pyc
+│   │   ├── model.cpython-311.pyc
+│   │   ├── model.cpython-313.pyc
+│   │   ├── model.cpython-39.pyc
+│   │   ├── tokenization.cpython-310.pyc
+│   │   ├── tokenization.cpython-311.pyc
+│   │   ├── tokenization.cpython-313.pyc
+│   │   ├── tokenization.cpython-39.pyc
+│   │   ├── transformer.cpython-310.pyc
+│   │   ├── transformer.cpython-311.pyc
+│   │   ├── transformer.cpython-313.pyc
+│   │   ├── transformer.cpython-39.pyc
+│   │   ├── utils.cpython-310.pyc
+│   │   ├── utils.cpython-311.pyc
+│   │   ├── utils.cpython-313.pyc
+│   │   └── utils.cpython-39.pyc
+│   ├── tokenization.py
+│   ├── transformer.py
+│   └── utils.py
+├── test_cut_protein_coverage.py
+├── test_data_new.json
+├── test_only_results
+│   ├── omitted_sites.csv
+│   ├── test_metrics.csv
+│   ├── test_metrics_readable.csv
+│   ├── test_sites.csv
+│   ├── test_split_summary.json
+│   └── test_summary_by_ptm.csv
+├── train_data_new.json
+└── train_model.py
+
+188 directories, 425 files

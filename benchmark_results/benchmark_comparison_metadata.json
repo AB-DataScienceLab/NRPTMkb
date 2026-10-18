@@ -1,0 +1,13 @@
+{
+  "source_metrics": "benchmark_results/metrics.csv",
+  "source_benchmark_sites": "benchmark_results/benchmark_sites.csv",
+  "roc_auc_status": "computed_and_verified",
+  "prediction_files": {
+    "NRPTMKB": "results_new/correct_predictions.csv",
+    "MIND": "results_original/correct_predictions_newlabels.csv",
+    "MusiteDeep": "results_musitedeep/correct_predictions.csv"
+  },
+  "note": "Pooled same-site benchmark includes training and test annotations; not unseen-protein validation.",
+  "threshold": "Taken from metrics.csv (normally 0.5) for Accuracy, Precision, Recall.",
+  "pr_auc": "Non-interpolated average precision as reported in metrics.csv."
+}

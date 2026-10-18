@@ -1,0 +1,52 @@
+P49116 S370 Phosphorylation K Site not matching
+P04150 S509 Phosphorylation Q Site not matching
+P22736 S214 Phosphorylation A Site not matching
+P10276 S4 Phosphorylation N Site not matching
+Q92731 S484 Phosphorylation V Site not matching
+P49116 S38 Phosphorylation V Site not matching
+P10275 S119 Phosphorylation P Site not matching
+P49116 S346 Phosphorylation I Site not matching
+P49116 S65 Phosphorylation I Site not matching
+P10276 S72 Phosphorylation V Site not matching
+P49116 S238 Phosphorylation G Site not matching
+P13631 S5 Phosphorylation K Site not matching
+O95718 S478 Phosphorylation Sequence too short
+P49116 S117 Phosphorylation C Site not matching
+Q92731 S331 Phosphorylation L Site not matching
+P49116 S115 Phosphorylation E Site not matching
+P22736 S218 Phosphorylation L Site not matching
+Q92570 S296 Phosphorylation G Site not matching
+P11473 S461 Phosphorylation Sequence too short
+P13631 S7 Phosphorylation R Site not matching
+P49116 S87 Phosphorylation P Site not matching
+O95718 S493 Phosphorylation Sequence too short
+O95718 S479 Phosphorylation Sequence too short
+P22736 S364 Phosphorylation L Site not matching
+Q92570 S377 Phosphorylation K Site not matching
+P10826 S70 Phosphorylation E Site not matching
+P10276 S440 Phosphorylation P Site not matching
+P11473 S442 Phosphorylation Sequence too short
+Q92731 T324 Phosphorylation L Site not matching
+Q92731 T491 Phosphorylation L Site not matching
+P10276 T11 Phosphorylation P Site not matching
+P49116 T243 Phosphorylation G Site not matching
+O75469 T172 Phosphorylation F Site not matching
+Q92731 T492 Phosphorylation L Site not matching
+P62508 T112 Phosphorylation P Site not matching
+P49116 T37 Phosphorylation I Site not matching
+P49116 T73 Phosphorylation S Site not matching
+P49116 T371 Phosphorylation L Site not matching
+O95718 T494 Phosphorylation Sequence too short
+P04150 K330 Ubiquitination Q Site not matching
+P06401 K222 Ubiquitination E Site not matching
+P04150 K89 Ubiquitination Y Site not matching
+P04150 K104 Ubiquitination F Site not matching
+P04150 K84 Ubiquitination L Site not matching
+P04150 K334 Ubiquitination Y Site not matching
+P04150 K393 Ubiquitination Y Site not matching
+P04150 K322 Ubiquitination H Site not matching
+P06401 K224 Ubiquitination E Site not matching
+P10276 Y2 Phosphorylation A Site not matching
+P10276 Y21 Phosphorylation V Site not matching
+Q92731 Y320 Phosphorylation V Site not matching
+P35398 Y102 Phosphorylation Q Site not matching

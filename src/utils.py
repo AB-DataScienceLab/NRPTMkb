@@ -49,7 +49,7 @@ def handle_flags():
     # Training parameters.
     flags.DEFINE_integer("seq_len", 514, "maximum lenth+2 of the model sequence (default: 512)")
     flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 32)")# 128 for 514; 32 for 1026; 8 for 2050
-    flags.DEFINE_integer("num_epochs", 30, "Number of training epochs (default: 20)")
+    flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 20)")
     flags.DEFINE_integer("n_lstm", 3, "number of lstm layer for rnn model")
     flags.DEFINE_integer("fill_cont", 5, "how many sequence should be considered as neighbour/2")
     flags.DEFINE_integer("n_fold", 15, "k-fold cross validation")
@@ -263,38 +263,123 @@ class PTMDataGenerator(tf.keras.utils.Sequence): #MetO_M
         return None
 
     def train_val_split(self):
-        # splitting training and validation
-        
-        fold = self.FLAGS.n_fold
-        split_size = self.dat_len // 5 if self.random_ensemble else self.dat_len // fold # for random, every time get 1/5
-        
-        count = 0
-        fail = True
-        while fail:
-            folds = []
-            all_id = set(self.list_id)
-            for _ in range(fold-1):
-                temp_split = random.sample(list(all_id), split_size)
+        """Multilabel split: distribute rare PTMs across as many folds as possible."""
 
-                folds.append(temp_split)
-                if not self.random_ensemble:
-                    # if not random, remove the set that already select
-                    all_id = all_id - set(temp_split)
-            if self.random_ensemble:
-                temp_split = random.sample(all_id, split_size)
-                folds.append(temp_split)
-            else:
-                folds.append(list(all_id))
-            fail=False
-            for fo in folds:
-                Y = [self.Y[s] for s in fo]
-                Y = np.sum(np.stack([np.sum(y, axis = 0) for y in Y]),axis=0)
-                if all([y==0 for y in Y]):
-                    fail=True
+        nfold = self.FLAGS.n_fold
+        rng = np.random.default_rng(self.FLAGS.random_seed)
+        ids = np.asarray(self.list_id)
+
+        # record x PTM presence
+        P = np.array([np.any(self.Y[i] > 0, axis=0) for i in ids], dtype=bool)
+        counts = P.sum(axis=0)
+
+        labels = (
+            [self.unique_labels[self.ind]]
+            if self.binary else self.unique_labels
+        )
+
+        print("\nPTM record counts:")
+        for l, n in zip(labels, counts):
+            print(f"{l:<30s}: {n}")
+
+        target = np.full(nfold, len(ids) // nfold)
+        target[:len(ids) % nfold] += 1
+
+        folds = [[] for _ in range(nfold)]
+        fold_counts = np.zeros((nfold, P.shape[1]), dtype=int)
+        unassigned = set(range(len(ids)))
+
+        rarity = 1.0 / np.maximum(counts, 1)
+
+        # ------------------------------------------------------------------
+        # Assign records containing rare PTMs first.
+        # For a PTM occurring N times, try to put those N records in
+        # N different folds (up to nfold).
+        # ------------------------------------------------------------------
+        for j in np.argsort(counts):
+
+            candidates = [i for i in unassigned if P[i, j]]
+
+            while candidates:
+
+                # Prefer folds that do not yet contain this PTM
+                available = [
+                    f for f in range(nfold)
+                    if len(folds[f]) < target[f]
+                ]
+
+                empty = [f for f in available if fold_counts[f, j] == 0]
+
+                possible = empty if empty else available
+
+                if not possible:
                     break
-                
-            count+=1
-        self.folds = folds
+
+                # Most useful record: contains several rare PTMs
+                i = max(
+                    candidates,
+                    key=lambda x: (
+                        np.sum(rarity[P[x]]),
+                        np.sum(P[x]),
+                        rng.random()
+                    )
+                )
+
+                # Prefer smallest suitable fold
+                f = min(
+                    possible,
+                    key=lambda x: (
+                        len(folds[x]),
+                        np.sum(fold_counts[x]),
+                        rng.random()
+                    )
+                )
+
+                folds[f].append(i)
+                fold_counts[f] += P[i]
+                unassigned.remove(i)
+
+                candidates = [x for x in candidates if x in unassigned]
+
+        # ------------------------------------------------------------------
+        # Fill remaining records while balancing fold sizes/PTM frequencies
+        # ------------------------------------------------------------------
+        remaining = list(unassigned)
+        rng.shuffle(remaining)
+
+        for i in remaining:
+
+            available = [
+                f for f in range(nfold)
+                if len(folds[f]) < target[f]
+            ]
+
+            # Prefer fold with lowest representation of labels in this record
+            f = min(
+                available,
+                key=lambda x: (
+                    np.sum(fold_counts[x][P[i]]),
+                    len(folds[x]),
+                    rng.random()
+                )
+            )
+
+            folds[f].append(i)
+            fold_counts[f] += P[i]
+
+        self.folds = [
+            ids[np.asarray(f, dtype=int)].tolist()
+            for f in folds
+        ]
+
+        print("\nValidation coverage:")
+        for j, label in enumerate(labels):
+            ncovered = np.sum(fold_counts[:, j] > 0)
+            print(
+                f"{label:<30s}: "
+                f"{int(counts[j]):4d} records, "
+                f"present in {ncovered}/{nfold} folds"
+            )
 
     def init_fold(self, iter):
         # choose the corresponding list id and split out validation dataset
