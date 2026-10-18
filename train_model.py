@@ -78,7 +78,7 @@ def main(argv):
     # =============================================================
     train_dat_aug = PTMDataGenerator(f'train_data_new.json', FLAGS, shuffle=True,ind=None, eval=False, class_weights=class_weights)
     unique_labels = train_dat_aug.unique_labels
-    input(unique_labels)
+    print(unique_labels)
     train_dat_aug.train_val_split()
     test_dat_aug = PTMDataGenerator(f'test_data_new.json', FLAGS, shuffle=True,ind=None, eval=True)#
     test_dat_aug.update_unique_labels(unique_labels)
@@ -100,7 +100,7 @@ def main(argv):
         model = build_model(FLAGS, optimizer, unique_labels, f'./saved_model/MIND_fifteenfold_fold_{i}', num_model=i) 
         model.train( train_dat_aug, val_dat_aug, FLAGS.num_epochs, callbacks=training_callbacks)
         
-        AUC, PR_AUC, confusion_matrixs = model.eval(FLAGS.seq_len, test_dat_aug, FLAGS.batch_size, unique_labels)
+        AUC, PR_AUC, confusion_matrixs = model.eval(FLAGS.seq_len, val_dat_aug, FLAGS.batch_size, unique_labels)
         for u in unique_labels:
             print('%.3f'%PR_AUC[u])
         for u in unique_labels:

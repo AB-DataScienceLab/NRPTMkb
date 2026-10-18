@@ -1,0 +1,50 @@
+{
+  "pr_auc_definition": "sklearn.metrics.average_precision_score; non-interpolated average precision",
+  "confidence_interval": "2.5/97.5 percentile of paired protein-cluster bootstrap",
+  "bootstrap_seed": 252,
+  "bootstrap_requested": 1000,
+  "class_size_definition": "number of distinct tested protein/PTM/residue examples",
+  "negative_label_definition": "eligible amino acids absent from curated positives: presumed negatives",
+  "independence_exact_uid_checked": false,
+  "homology_independence_verified": false,
+  "comparison_policy": "intersection of sites with scores for every class-participating model",
+  "coverage_caveat": "Excluded sites are audited. Missingness can bias comparisons; try to recover all scores if possible.",
+  "calibration_caveat": "Brier/ECE on this evaluated site distribution; not evidence of improved calibration alone",
+  "model_score_files": {
+    "MIND": "results_original/correct_predictions_newlabels.csv",
+    "NRPTMKB": "results_newwwww/correct_predictions.csv",
+    "MusiteDeep": "results_musitedeep/correct_predictions.csv"
+  },
+  "model_supported_classes": {
+    "MIND": [
+      "Acetylation_K",
+      "Methylation_K",
+      "Phosphorylation_S",
+      "Phosphorylation_T",
+      "Phosphorylation_Y",
+      "Sumoylation_K",
+      "Ubiquitination_K"
+    ],
+    "NRPTMKB": [
+      "Acetylation_K",
+      "Methylation_K",
+      "Phosphorylation_S",
+      "Phosphorylation_T",
+      "Phosphorylation_Y",
+      "Sumoylation_K",
+      "Ubiquitination_K"
+    ],
+    "MusiteDeep": [
+      "Acetylation_K",
+      "Methylation_K",
+      "Phosphorylation_S",
+      "Phosphorylation_T",
+      "Phosphorylation_Y",
+      "Sumoylation_K",
+      "Ubiquitination_K"
+    ]
+  },
+  "thresholds_json": null,
+  "threshold_provenance_caveat": "Supplied thresholds must have been fixed on independent validation data; this cannot be proved from their values.",
+  "supported_classes_provenance": "inferred from PTM_type values in score CSVs"
+}

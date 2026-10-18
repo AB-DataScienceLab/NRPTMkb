@@ -1,0 +1,8 @@
+PTM,Models,Eligible Benchmark Sites,Excluded Missing Score Sites,Excluded Positive Sites,Excluded Negative Sites,Class Size,Positive Class Size,Negative Class Size,Number of Proteins,Positive Proteins,Low Support,Valid Bootstrap Draws
+Acetylation_K,MIND;NRPTMKB;MusiteDeep,2575,220,6,214,2355,85,2270,87,35,False,1000
+Methylation_K,MIND;NRPTMKB;MusiteDeep,2575,220,23,197,2355,182,2173,87,53,False,1000
+Phosphorylation_S,MIND;NRPTMKB;MusiteDeep,4126,208,25,183,3918,586,3332,87,77,False,1000
+Phosphorylation_T,MIND;NRPTMKB;MusiteDeep,2164,153,16,137,2011,202,1809,87,55,False,1000
+Phosphorylation_Y,MIND;NRPTMKB;MusiteDeep,1290,82,5,77,1208,91,1117,87,39,False,1000
+Sumoylation_K,MIND;NRPTMKB;MusiteDeep,2575,220,12,208,2355,144,2211,87,49,False,1000
+Ubiquitination_K,MIND;NRPTMKB;MusiteDeep,2575,220,8,212,2355,63,2292,87,28,False,1000

@@ -36,15 +36,9 @@ if not OPTM:
     
     # for new model
     label2aa = {
-        'Acetylation_K': 'K', 'Acetylation_M': 'M', 'Glycosylation_S': 'S', 
-        'Glycosylation_T': 'T', 'Methylation_G': 'G', 'Methylation_K': 'K', 'Methylation_R': 'R', 
-        'Monomethylation_K': 'K', 'O-glcNAcylation_S': 'S', 'Palmitoylation_C': 'C', 
-        'Phosphorylation_C': 'C', 'Phosphorylation_E': 'E', 'Phosphorylation_K': 'K', 
-        'Phosphorylation_R': 'R', 'Phosphorylation_S': 'S', 'Phosphorylation_T': 'T', 
-        'Phosphorylation_Y': 'Y', 'Sumoylation_K': 'K', 'Thiol oxidation_C': 'C', 'Ubiquitination_K': 'K',
-        'Lipidation_C': 'C'
+        'Acetylation_K': 'K', 'Methylation_K': 'K', 'Phosphorylation_S': 'S', 'Phosphorylation_T': 'T', 
+        'Phosphorylation_Y': 'Y', 'Sumoylation_K': 'K', 'Ubiquitination_K': 'K'
     }
-    
 else:
     label2aa = {"Arg-OH_R":'R',"Asn-OH_N":'N',"Asp-OH_D":'D',"Cys4HNE_C":"C","CysSO2H_C":"C","CysSO3H_C":"C",
         "Lys-OH_K":"K","Lys2AAA_K":"K","MetO_M":"M","MetO2_M":"M","Phe-OH_F":"F",
@@ -61,40 +55,66 @@ def ensemble_get_weights(PR_AUCs, unique_labels):
 
 
 def cut_protein(sequence, seq_len):
-    # cut the protein if it is longer than chunk_size
-    # only includes labels within middle chunk_size//2
-    # during training, if no pos label exists, ignore the chunk
-    # during eval, retain all chunks for multilabel; retain all chunks of protein have specific PTM for binary
+    # Cut the protein if it is longer than chunk_size.
+    # Only labels within the central covered region of each chunk should be used.
+    # During training, chunks without positive labels may be ignored.
+    # During evaluation, retain all relevant chunks.
+
     chunk_size = seq_len - 2
-    assert chunk_size%4 == 0
-    quar_chunk_size = chunk_size//4
-    half_chunk_size = chunk_size//2
+
+    assert chunk_size % 4 == 0
+
+    quar_chunk_size = chunk_size // 4
+    half_chunk_size = chunk_size // 2
+
     records = []
+
     if len(sequence) > chunk_size:
-        for i in range((len(sequence)-1)//half_chunk_size):
-            # the number of half chunks=(len(sequence)-1)//chunk_size+1,
-            # minus one because the first chunks contains two halfchunks
-            max_seq_ind = (i+2)*half_chunk_size
-            if i==0:
-                cover_range = (0,quar_chunk_size*3)
-            elif i==((len(sequence)-1)//half_chunk_size):
-                cover_range = (quar_chunk_size, len(sequence)-i*half_chunk_size)
+        n_chunks = (len(sequence) - 1) // half_chunk_size
+
+        for i in range(n_chunks):
+            start_seq_ind = i * half_chunk_size
+            max_seq_ind = (i + 2) * half_chunk_size
+
+            if i == 0:
+                # First chunk: use first 3/4 of the chunk
+                cover_range = (
+                    0,
+                    quar_chunk_size * 3
+                )
+
+            elif i == n_chunks - 1:
+                # Final chunk: retain everything from 1/4 chunk onward
+                # so that the end of the protein is never omitted.
                 max_seq_ind = len(sequence)
+
+                cover_range = (
+                    quar_chunk_size,
+                    len(sequence) - start_seq_ind
+                )
+
             else:
-                cover_range = (quar_chunk_size, quar_chunk_size+half_chunk_size)
-            seq = sequence[i*half_chunk_size: max_seq_ind]
-            # idx = [j for j in range(len((seq))) if (seq[j] in aa and j >= cover_range[0] and j < cover_range[1])]
+                # Middle chunks: only use central half
+                cover_range = (
+                    quar_chunk_size,
+                    quar_chunk_size + half_chunk_size
+                )
+
+            seq = sequence[start_seq_ind:max_seq_ind]
+
             records.append({
                 'chunk_id': i,
                 'seq': seq,
-                # 'idx': idx
+                'cover_range': cover_range
             })
+
     else:
         records.append({
             'chunk_id': None,
             'seq': sequence,
-            # 'idx': [j for j in range(len((sequence))) if sequence[j] in aa]
+            'cover_range': (0, len(sequence))
         })
+
     return records
 
 
@@ -102,6 +122,9 @@ def main(argv):
     FLAGS = flags.FLAGS
 
     # tf.config.run_functions_eagerly(True)
+    
+    with open(FLAGS.pretrain_name + f'_PRAU.json') as f:
+        AUPR_dat = json.load(f)
 
     labels = list(label2aa.keys())
     # get unique labels
@@ -110,8 +133,6 @@ def main(argv):
     index_to_label = {i: str(label) for i, label in enumerate(unique_labels)}
     chunk_size = FLAGS.seq_len - 2
 
-    with open(FLAGS.pretrain_name + f'_PRAU.json') as f:
-        AUPR_dat = json.load(f)
     
     # models = [tf.keras.models.load_model(model_name)]
     models = [] # load models
@@ -221,11 +242,11 @@ def main(argv):
     with open(os.path.join(FLAGS.res_path,'result.json'),'w') as fw:
         json.dump({f"{a}_{b}_{c}": v for (a, b, c), v in y_preds.items()}, fw)
     
-    correct_pred = {k: v for k, v in y_preds.items() if float(v) >= 0.8}
+    correct_pred = {k: v for k, v in y_preds.items()}
     correct_df_data = [list(k) + [v] for k, v in correct_pred.items()]
     correct_df = pd.DataFrame(correct_df_data, columns =['uid','site','PTM_type','pred_score'])
     correct_df = correct_df.sort_values(by=['pred_score'], ascending=False)
-    correct_df.to_csv(os.path.join(FLAGS.res_path,'correct_predictions.csv'), index=False)
+    correct_df.to_csv(os.path.join(FLAGS.res_path,'all_sequence_predictions.csv'), index=False)
     
 def pad_X( X, seq_len):
     return np.array(X + (seq_len - len(X)) * [additional_token_to_index['<PAD>']])

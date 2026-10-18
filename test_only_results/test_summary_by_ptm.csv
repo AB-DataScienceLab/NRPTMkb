@@ -1,0 +1,8 @@
+PTM_type,N_training_positive_annotations,N_test_positive_annotations,N_test_positives_with_scores,N_test_positives_missing_scores,N_training_positive_sites_excluded,N_eligible_test_positions_after_train_positive_removal,N_evaluation_sites_with_scores,N_presumed_negative_scored,N_missing_scores_on_other_eligible_sites,N_test_uid_with_evaluable_sites,N_parent_accessions_with_evaluable_sites
+Acetylation_K,81,10,10,0,81,2494,2494,2484,0,87,48
+Methylation_K,184,21,18,3,184,2391,2191,2173,197,87,48
+Phosphorylation_S,549,62,58,4,549,3577,3390,3332,183,87,48
+Phosphorylation_T,197,21,21,0,197,1967,1830,1809,137,87,48
+Phosphorylation_Y,86,10,9,1,86,1204,1126,1117,77,87,48
+Sumoylation_K,140,16,15,1,140,2435,2226,2211,208,87,48
+Ubiquitination_K,64,7,7,0,64,2511,2299,2292,212,87,48
