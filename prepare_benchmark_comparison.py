@@ -281,17 +281,23 @@ def evaluate_all(labels, scores_by_model, threshold, repeats, seed):
         }
         for model in MODELS:
             full[(ptm, model)] = metrics(y, probabilities[model], threshold)
-        sums = {model: np.zeros(len(METRICS), dtype=np.float64) for model in MODELS}
-        # True negative bootstrap: every realisation draws N+ negatives WITH
-        # replacement. Positives are held fixed; all models share the draw.
-        for _ in range(repeats):
+        samples = {
+            model: np.zeros((repeats, len(METRICS)), dtype=np.float64)
+            for model in MODELS
+        }
+
+        for i in range(repeats):
             sampled_neg = rng.choice(negative_idx, size=n_pos, replace=True)
             indices = np.concatenate((positive_idx, sampled_neg))
             yy = y[indices]
+
             for model in MODELS:
-                sums[model] += metrics(yy, probabilities[model][indices], threshold)
+                samples[model][i] = metrics(
+                    yy, probabilities[model][indices], threshold
+                )
+
         for model in MODELS:
-            balanced[(ptm, model)] = sums[model] / repeats
+            balanced[(ptm, model)] = np.median(samples[model], axis=0)
     return full, balanced
 
 
