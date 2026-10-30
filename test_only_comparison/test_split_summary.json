@@ -1,0 +1,42 @@
+{
+  "train_json": "train_data_new.json",
+  "test_json": "test_data_new.json",
+  "prediction_files": {
+    "NRPTMpred": "results_new/correct_predictions.csv",
+    "MIND": "results_original/correct_predictions_newlabels.csv",
+    "MusiteDeep": "results_musitedeep/correct_predictions.csv"
+  },
+  "comparison_policy": "only held-out test-side eligible sites scored by ALL three models",
+  "train_positive_annotations": 1301,
+  "test_positive_annotations": 147,
+  "train_test_positive_annotation_overlap": 0,
+  "train_uids": 87,
+  "test_uids": 87,
+  "shared_train_test_uids": 87,
+  "shared_train_test_parent_accessions": 48,
+  "test_uids_with_identical_training_sequence": 87,
+  "sequence_parent_level_independence_verified": false,
+  "test_parent_accessions": 48,
+  "matched_test_positive_scores": 138,
+  "matched_test_presumed_negatives": 15204,
+  "candidate_test_sites_after_training_positive_exclusion": 16579,
+  "candidate_test_sites_with_common_scores": 15342,
+  "common_model_score_coverage": 0.9253875384522589,
+  "threshold_for_accuracy_precision_recall": 0.5,
+  "pr_auc_definition": "sklearn average_precision_score (not fixed threshold)",
+  "roc_auc_definition": "continuous probabilities (not fixed threshold)",
+  "balanced_policy": "all matched test positives + equally many matched negatives drawn with replacement per PTM; identical draws across models",
+  "balanced_repeats": 1000,
+  "balanced_aggregation": "median across balanced-negative draws for each model, PTM and metric",
+  "bootstrap_unit": "parent UniProt accession (UID prefix before first hyphen)",
+  "bootstrap_draws_requested": 1000,
+  "confidence_intervals": "2.5th/97.5th percentiles of shared parent-accession resamples; suppressed if <2 positive parent groups",
+  "seed": 252,
+  "caveats": [
+    "Unannotated eligible residues are presumed negatives, not experimentally verified negatives.",
+    "Training-negative samples are not listed in source JSONs, so annotation splits may have used withheld positives as negatives.",
+    "Protein/parent-disjoint results require zero parent accession overlap and retrained NR-PTMpred predictions.",
+    "MIND-S pretraining and receptor-family homology independence are not established by this split.",
+    "Missing model scores are excluded rather than filled with zero; this may bias comparisons."
+  ]
+}

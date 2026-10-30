@@ -1,0 +1,8 @@
+PTM_type,Candidate_positive,Candidate_negative,Scored_positive,Scored_negative,Missing_positive,Missing_negative
+Acetylation_K,91,2484,85,2270,6,214
+Methylation_K,205,2370,182,2173,23,197
+Phosphorylation_S,611,3515,586,3332,25,183
+Phosphorylation_T,218,1946,202,1809,16,137
+Phosphorylation_Y,96,1194,91,1117,5,77
+Sumoylation_K,156,2419,144,2211,12,208
+Ubiquitination_K,71,2504,63,2292,8,212

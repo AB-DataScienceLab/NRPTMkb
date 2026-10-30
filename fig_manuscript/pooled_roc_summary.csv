@@ -1,0 +1,4 @@
+Model,PTM_type,N_positive,N_negative,ROC_AUC,Average_Precision,Source,Aggregation
+MIND-S,ALL_POOLED,1353,15204,0.6173129207255337,0.19207698313572832,curated_full_negatives,micro_pooled_residue_PTM_examples
+NRPTMpred,ALL_POOLED,1353,15204,0.9412325703762168,0.5734175673237466,curated_full_negatives,micro_pooled_residue_PTM_examples
+MusiteDeep,ALL_POOLED,1353,15204,0.666490180453932,0.21978260136887018,curated_full_negatives,micro_pooled_residue_PTM_examples
