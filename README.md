@@ -23,40 +23,44 @@ NR-PTMkb provides multiple interactive modules, including **NR Roots**, **NR Tab
 ```text
 .
 ├── data/
-│   ├── raw/                         # Original PTM source tables
-│   │   ├── Human.csv
-│   │   ├── Human_filtered.xlsx
-│   │   ├── Human_tr.csv
-│   │   └── LastRitesNRPTMdb.csv
-│   └── curated/
-│       ├── NR_InputData_New.csv      # Curated PTM annotations
-│       ├── NR_Sequences_New.csv      # Nuclear receptor sequences
+│   ├── raw/                              # Original source data
+│   └── curated/                          # Curated NR-PTM predictor inputs
+│       ├── NR_InputData_New.csv
+│       ├── NR_Sequences_New.csv
 │       ├── protein_sequences_new.fasta
-│       └── drop_PTM_sites.txt        # Excluded PTM sites
-├── train_data_new.json              # Training annotation data
-├── test_data_new.json               # Held-out annotation data
-├── prepare_training_data.py         # Training-data preparation
-├── train_model.py                   # Model training
-├── batch_predict.py                 # Batch prediction
-├── src/                             # Model architecture and supporting modules
-├── model_desc.md                    # Model architecture description
-├── new_model/                       # Newly trained NR-PTMpred ensemble/checkpoints
-├── saved_model/                     # Original pretrained MIND-S model checkpoints
-├── results_new/                     # NR-PTMpred site-level predictions
-├── results_original/                # Original MIND-S predictions and label mapping
-├── results_musitedeep/              # MusiteDeep site-level predictions
-├── evaluate_test_data.py            # Held-out annotation evaluation
-├── evaluate_result.py               # Three-model benchmark and uncertainty analyses
-├── prepare_benchmark_comparison.py  # Full-/balanced-negative Excel comparisons
-├── plot_ptm_performance.py          # Confusion matrices, ROC and PR curves
-├── test_cut_protein_coverage.py     # Sequence-window coverage tests
-├── test_only_results/              # Held-out evaluation results
-├── benchmark_results/              # Benchmark metrics, scored sites and comparisons
-├── plots/                           # PTM-specific performance figures (PNG)
-├── fig_manuscript/                  # Manuscript figures
-├── environment.yml                  # Conda environment specification
-├── requirements-lock.txt           # Python dependency versions
-├── deprecated_files/               # Historical data and scripts
+│       └── drop_PTM_sites.txt
+├── train_data_new.json                  # Training PTM annotations
+├── test_data_new.json                   # Held-out PTM annotations
+├── prepare_training_data.py             # Annotation split preparation
+├── train_model.py                       # NR-PTMpred training
+├── batch_predict.py                     # Batch inference
+├── src/                                 # Neural-network implementation
+│   ├── __init__.py
+│   ├── model.py
+│   ├── tokenization.py
+│   ├── transformer.py
+│   └── utils.py
+├── model_desc.md                        # Architecture description
+├── results_new/                         # NR-PTMpred predictions
+├── results_original/                    # MIND-S predictions and label mapping
+├── results_musitedeep/                  # MusiteDeep predictions
+├── evaluate_test_data.py                # Held-out annotation evaluation
+├── evaluate_result.py                   # Matched-site evaluation and bootstrap
+├── prepare_benchmark_comparison.py      # Full/balanced three-model benchmark
+├── plot_ptm_performance.py              # Confusion matrices, PR and ROC plots
+├── plot_ptm_roc.py                      # Manuscript ROC plots and source data
+├── test_cut_protein_coverage.py         # Sequence-window coverage check
+├── benchmark_results/                  # All-curated benchmark outputs
+├── test_only_comparison/               # Held-out three-model comparison
+├── test_only_results/                  # Held-out evaluation records
+├── plots/                              # PTM-specific comparisons
+├── fig_manuscript/                     # Seven PTM-specific and model-level ROC figures
+├── environment.yml                     # Conda environment
+├── requirements.txt                    # Python dependencies
+├── requirements-lock.txt               # Pinned dependencies
+├── deprecated_files/                   # Legacy scripts and datasets
+├── file_structure                       # Repository tree listing
+├── nrptmkb_updated_files.zip            # Archived repository files
 └── README.md
 ```
 
